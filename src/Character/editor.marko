@@ -1,0 +1,40 @@
+class {
+  onCreate(input) {
+    this.state = {
+      toggled: false,
+      errors: [],
+    }
+    console.log('editor input', input)
+    this.subscribeTo(input.link).on('refresh', () => {
+      console.log('should wefwesh')
+    })
+    this.subscribeTo(input.link).on('destroy', () => {
+      console.log('destroying')
+      this.destroy({removeNode: false, recursive: false})
+    })
+    this.subscribeTo(input.link).on('errors', errors => {
+      console.log('TODO: handle', errors)
+      this.state.errors = errors
+    })
+    console.log('created Editor')
+  }
+  onDestroy() {
+    console.log('destroyed Editor')
+  }
+  onMount() {
+    console.log('mounted Editor')
+  }
+  onClick() {
+    this.state.toggled = !this.state.toggled
+  }
+}
+
+style {
+  .nuts {
+    background: red;
+  }
+}
+
+div.nuts
+  button on-click('onClick') -- toggle it
+  div -- ${state.toggled}

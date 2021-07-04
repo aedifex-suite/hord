@@ -1,0 +1,29 @@
+{
+  "name": "aedifex-packet-hord",
+  "version": "0.0.0",
+  "description": "Aedifex Packet for Hord support",
+  "aedifex": {
+    "name": "Hord",
+    "description": "Adds support for Hord characters, gear, enemies, and specials."
+  },
+  "main": "dist/bundle.js",
+  "dependencies": {
+    "@marko/rollup": "^3.3.1",
+    "@marko/compiler": "^5.10.7",
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "marko": "^5.10.7",
+    "postcss": "^8.3.5",
+    "rollup": "^2.52.7",
+    "rollup-plugin-postcss": "^4.0.0",
+    "schisma": "^0.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c",
+    "watch": "rollup -c -w"
+  },
+  "keywords": [],
+  "author": "Ketchetwahmeegwun T. Southall",
+  "license": "MPL-2.0"
+}

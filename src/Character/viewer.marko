@@ -1,0 +1,40 @@
+class {
+  onCreate(input) {
+    this.state = {
+      toggled: false,
+      errors: [],
+    }
+    console.log('viewer input', input)
+    this.subscribeTo(input.link).on('refresh', () => {
+      console.log('should wefwesh')
+    })
+    this.subscribeTo(input.link).on('destroy', () => {
+      console.log('destroying')
+      this.destroy({removeNode: false, recursive: false})
+    })
+    this.subscribeTo(input.link).on('errors', errors => {
+      console.log('TODO: handle', errors)
+      this.state.errors = errors
+    })
+    console.log('created Viewer')
+  }
+  onDestroy() {
+    console.log('destroyed Viewer')
+  }
+  onMount() {
+    console.log('mounted Viewer')
+  }
+  onClick() {
+    this.state.toggled = !this.state.toggled
+  }
+}
+
+style {
+  .buts {
+    background: blue;
+  }
+}
+
+div.buts
+  button on-click('onClick') -- view toggle it
+  div -- ${state.toggled}
