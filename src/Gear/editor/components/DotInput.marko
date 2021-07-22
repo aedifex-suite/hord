@@ -1,0 +1,30 @@
+class {
+  convertEvent(type, e) {
+    if (type === 'number') return Number(e.target.value)
+    if (type === 'checkbox') return e.target.checked
+    return e.target.value
+  }
+  handleChange(which) {
+  }
+}
+
+macro|{ renderBody, field }| name='ErrorableMacro'
+  span.errorable class=input.errors[field]?'-error':''
+    <${renderBody}/>
+    if(input.errors[field])
+      span.errorable__error -- ${input.errors[field]}
+
+label.HordEditor__Input
+  span.HordEditor__Input__name -- ${input.title}
+    ErrorableMacro field=input.field
+      if(input.type==='dropdown')
+        select on-change(e=>input.dot[input.field]=e.target.value)
+          if(!input.list||input.list.length===0)
+            option -- missing list
+          else
+            for|item| of=input.list
+              $ let title = typeof item==='string'?item:item.title
+              $ let option = typeof item==='string'?item:item.option
+              option selected=input.dot[input.field]===option value=option -- ${title}
+      else
+        input.HordEditor__Input__input type=input.type value=input.dot[input.field] placeholder=input.placeholder on-change(e=>input.dot[input.field]=component.convertEvent(input.type, e))

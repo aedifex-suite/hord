@@ -1,0 +1,154 @@
+import {
+  GearArmorSchema,
+  GearConsumableSchema,
+  GearMiscSchema,
+  GearWealthSchema,
+  GearWeaponSchema,
+} from '../schemata/gear'
+
+class {
+  onCreate(input) {
+    this.state = {
+      errors: [],
+      currentType: 'misc',
+    }
+    this.subscribeTo(input.link).on('refresh', () => {
+      this.forceUpdate()
+    })
+    this.subscribeTo(input.link).on('destroy', () => {
+      this.destroy({removeNode: false, recursive: false})
+    })
+    this.subscribeTo(input.link).on('errors', errors => {
+      this.state.errors = errors
+    })
+  }
+  changeType(dot, e) {
+    switch(e.target.value) {
+      case 'weapon':
+        this.input.dot[dot] = GearWeaponSchema.conform({...this.input.dot[dot], type: 'weapon'})
+        break
+      case 'armor':
+        this.input.dot[dot] = GearArmorSchema.conform({...this.input.dot[dot], type: 'armor'})
+        break
+      case 'consumable':
+        this.input.dot[dot] = GearConsumableSchema.conform({...this.input.dot[dot], type: 'consumable'})
+        break
+      case 'wealth':
+        this.input.dot[dot] = GearWealthSchema.conform({...this.input.dot[dot], type: 'wealth'})
+        break
+      case 'misc':
+        this.input.dot[dot] = GearMiscSchema.conform({...this.input.dot[dot], type: 'misc'})
+        break
+      default:
+      return
+    }
+    this.forceUpdate()
+  }
+  createGear(type) {
+    switch(type) {
+      case 'weapon':
+        return GearWeaponSchema.create()
+      case 'armor':
+        return GearArmorSchema.create()
+      case 'consumable':
+        return GearConsumableSchema.create()
+      case 'wealth':
+        return GearWealthSchema.create()
+      case 'misc':
+        return GearMiscSchema.create()
+      default:
+      return
+    }
+  }
+  addGear() {
+    let g = this.createGear(this.state.currentType)
+    if (!g) {
+      // TODO: report error
+      return console.error('no such gear', this.state.currentType)
+    }
+    this.input.file.queue()
+    if (!this.input.file.state.gear) {
+      this.input.file.state.gear = []
+    }
+    this.input.file.state.gear.push(g)
+    this.input.file.unqueue()
+  }
+}
+
+style {
+  .HordEditor {
+  }
+  .HordEditor__Weapon {
+  }
+  .HordEditor__Entry {
+  }
+  .HordEditor__Section {
+  }
+  .HordEditor__Gear {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .HordEditor__Gear__Items {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .HordEditor__Gear__Items__Item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: .5em;
+    margin: .25em;
+    background: var(--listing-bg);
+  }
+}
+
+macro|{ renderBody, field }| name='ErrorableMacro'
+  span.errorable class=state.errors[field]?'-error':''
+    <${renderBody}/>
+    if(state.errors[field])
+      span.errorable__error -- ${state.errors[field]}
+
+macro|{ type, field, placeholder, title, list }| name='InputMacro'
+  $ let convertEvent = e => {
+    if (type === 'number') return Number(e.target.value)
+    if (type === 'checkbox') return e.target.checked
+    return e.target.value
+  }
+  label.HordEditor__Entry
+    span.HordEditor__Entry__name -- ${title}
+      ErrorableMacro field=field
+        if(type==='dropdown')
+          select on-change('changeType', field)
+            if(!list||list.length===0)
+              option -- missing list
+            else
+              for|item| of=list
+                $ let title = typeof item==='string'?item:item.title
+                $ let option = typeof item==='string'?item:item.option
+                option selected=input.dot[field]===option value=option -- ${title}
+        else
+          input.HordEditor__Entry__input type=type value=input.dot[field] placeholder=placeholder on-change(e=>input.dot[field]=convertEvent(e))
+
+section.HordEditor__General
+  InputMacro field='name'
+section.HordEditor__Gear
+  div.HordEditor__Gear__Controls
+    select on-change(e=>component.state.currentType=e.target.value)
+      for|gear| of=['weapon', 'armor', 'consumable', 'wealth', 'misc']
+        option selected=state.currentType===gear value=gear -- ${gear}
+  button on-click('addGear') -- add gear
+  div.HordEditor__Gear__Items
+    if(input.dot['gear'])
+      for|gear, gearIndex| of=input.dot['gear']
+        div.HordEditor__Gear__Items__Item
+          $ let d = `gear.${gearIndex}`
+          label.HordEditor__Entry
+            span.HordEditor__Entry__name -- type
+          ErrorableMacro field=`${d}.type`
+            select on-change('changeType', d)
+              for|item| of=['weapon', 'armor', 'consumable', 'wealth', 'misc']
+                option selected=input.dot[`${d}.type`]===item value=item -- ${item}
+          DotInput errors=state.errors dot=input.dot field=`${d}.name` title='name' tooltip='Descriptive name of the weapon.'
+          DotInput errors=state.errors dot=input.dot field=`${d}.worth` type='number' title='worth' tooltip='Base wealth value.'
+          if(gear.type === 'weapon')
+            Weapon dot=input.dot field=d errors=state.errors

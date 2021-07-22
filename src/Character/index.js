@@ -3,9 +3,11 @@ import Viewer from './viewer.marko'
 import CharacterSchema from './schemata/character.js'
 
 export default {
+  name: 'Character',
+  description: 'A default character sheet.',
   match: [
     {
-      type: /horde-character/g, 
+      type: /hord-character/g, 
       version: '1.x',
     }
   ],
