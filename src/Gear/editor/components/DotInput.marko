@@ -1,10 +1,15 @@
 class {
-  convertEvent(type, e) {
-    if (type === 'number') return Number(e.target.value)
-    if (type === 'checkbox') return e.target.checked
+  convertEvent(e) {
+    if (this.input.type === 'number') return Number(e.target.value)
+    if (this.input.type === 'checkbox') return e.target.checked
     return e.target.value
   }
-  handleChange(which) {
+  handleChange(e) {
+    if (e.target.value == '') {
+      delete this.input.dot[this.input.field]
+    } else {
+      this.input.dot[this.input.field] = this.convertEvent(e)
+    }
   }
 }
 
@@ -27,4 +32,4 @@ label.HordEditor__Input
               $ let option = typeof item==='string'?item:item.option
               option selected=input.dot[input.field]===option value=option -- ${title}
       else
-        input.HordEditor__Input__input type=input.type value=input.dot[input.field] placeholder=input.placeholder on-change(e=>input.dot[input.field]=component.convertEvent(input.type, e))
+        input.HordEditor__Input__input type=input.type value=input.dot[input.field] placeholder=input.placeholder on-change('handleChange')
