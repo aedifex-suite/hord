@@ -130,7 +130,7 @@ macro|{ type, field, placeholder, title, list }| name='InputMacro'
           input.HordEditor__Entry__input type=type value=input.dot[field] placeholder=placeholder on-change(e=>input.dot[field]=convertEvent(e))
 
 section.HordEditor__General
-  InputMacro field='name'
+  DotInput errors=state.errors dot=input.dot field=`name` title='name' tooltip='Descriptive name of the gear selection.'
 section.HordEditor__Gear
   div.HordEditor__Gear__Controls
     select on-change(e=>component.state.currentType=e.target.value)
