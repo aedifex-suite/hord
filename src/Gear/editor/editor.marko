@@ -84,6 +84,10 @@ style {
   }
   .HordEditor__Section {
   }
+  .HordEditor__Gear__Controls {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
   .HordEditor__Gear {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -136,7 +140,7 @@ section.HordEditor__Gear
     select on-change(e=>component.state.currentType=e.target.value)
       for|gear| of=['weapon', 'armor', 'consumable', 'wealth', 'misc']
         option selected=state.currentType===gear value=gear -- ${gear}
-  button on-click('addGear') -- add gear
+    button on-click('addGear') -- add gear
   div.HordEditor__Gear__Items
     if(input.dot['gear'])
       for|gear, gearIndex| of=input.dot['gear']
