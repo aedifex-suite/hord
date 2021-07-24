@@ -1,4 +1,5 @@
 import schisma from 'schisma'
+import { DefenseTypes } from '../util/common'
 
 export const RequiredStringSchema = schisma({
   $type: String,
@@ -31,12 +32,20 @@ export const OptionalIntegerSchema = schisma({
   $required: false,
 })
 
-export const DamageTypeSchema = schisma({
+export const SimpleDamageTypeSchema = schisma({
   $type: String,
   $validate: v => {
     let t = ['generic', 'stab', 'slash', 'bludgeon']
     if (!t.includes(v)) return `field must be one of ${t.join(', ')}`
   },
+})
+
+export const ComplexDamageTypeSchema = schisma({
+  $type: [[SimpleDamageTypeSchema]],
+})
+
+export const DamageTypeSchema = schisma({
+  $typeof: [SimpleDamageTypeSchema, ComplexDamageTypeSchema],
   $required: true,
 })
 
@@ -47,4 +56,11 @@ export const OptionalImageSchema = schisma({
     if (!v.match(/^data:image\/[a-z]+;base64,/)) return 'field must be a base64-encoded value'
   },
   $required: false,
+})
+
+export const DefenseStringSchema = schisma({
+  $type: String,
+  $validate: v => {
+    if (!DefenseTypes.includes(v)) return `field must be one of ${DefenseTypes.join(', ')}`
+  },
 })
