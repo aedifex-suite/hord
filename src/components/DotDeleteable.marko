@@ -1,0 +1,41 @@
+class {
+  convertEvent(e) {
+    if (this.input.type === 'number') return Number(e.target.value)
+    if (this.input.type === 'checkbox') return e.target.checked
+    return e.target.value
+  }
+  handleChange(e) {
+    if (this.input.type === 'checkbox') {
+      this.input.dot[this.input.field] = e.target.checked
+    } else {
+      if (e.target.value == '') {
+        delete this.input.dot[this.input.field]
+      } else {
+        this.input.dot[this.input.field] = this.convertEvent(e)
+      }
+    }
+  }
+}
+
+macro|{ renderBody, field }| name='ErrorableMacro'
+  span.errorable class=input.errors[field]?'-error':''
+    <${renderBody}/>
+    if(input.errors[field])
+      span.errorable__error -- ${input.errors[field]}
+
+label class=`-${input.type}`
+  ErrorableMacro field=input.field
+    if(input.type==='dropdown')
+      select on-change(e=>input.dot[input.field]=e.target.value)
+        if(!input.list||input.list.length===0)
+          option -- missing list
+        else
+          for|item| of=input.list
+            $ let title = typeof item==='string'?item:item.title
+            $ let option = typeof item==='string'?item:item.option
+            option selected=input.dot[input.field]===option value=option -- ${title}
+    else-if(input.type==='textarea')
+      textarea on-change('handleChange') -- ${input.dot[input.field]}
+    else
+      input type=input.type value=input.dot[input.field] checked=input.dot[input.field] placeholder=input.placeholder on-change('handleChange')
+  button on-click(_=>component.emit('delete')) -- x
