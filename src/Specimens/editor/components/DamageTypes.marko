@@ -1,0 +1,43 @@
+import { DefenseTypes } from '../../../util/common'
+import { DamageTypeSchema } from '../../../schemata/common'
+
+class {
+  addDamageType() {
+    this.input.file.queue()
+    try {
+      if (!this.input.dot[this.input.field]) {
+        this.input.dot[this.input.field] = []
+      }
+      this.input.dot[this.input.field].push(DamageTypeSchema.create())
+    } catch(err) {
+      console.error(err)
+    }
+    this.input.file.unqueue()
+  }
+  removeDamageType(index) {
+    this.input.file.queue()
+    this.input.dot[this.input.field] = this.input.dot[this.input.field].filter((_,i)=>i!==index)
+    if (this.input.dot[this.input.field].length === 0) {
+      delete this.input.dot[this.input.field]
+    }
+    this.input.file.unqueue()
+  }
+}
+
+fieldset
+  legend -- damage types
+    button on-click('addDamageType') -- +
+  div.HordEditor__DamageTypes
+    if(input.dot[`${input.field}`])
+      for|damage,damageIndex| of=input.dot[input.field]
+        $ let d = `${input.field}.${damageIndex}`
+        DotDeleteable errors=input.errors dot=input.dot field=d type='dropdown' list=DefenseTypes on-delete('removeDamageType', damageIndex)
+
+style {
+  .HordEditor__DamageTypes {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}

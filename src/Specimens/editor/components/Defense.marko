@@ -1,0 +1,7 @@
+import { DefenseTypes } from '../../../util/common'
+
+div.HordeEditor__Defense
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.type` title='type' list=DefenseTypes type='dropdown' tooltip='Defense type.'
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.value` title='value' type='number' tooltip='Defense value.'
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.perfect` title='perfect' type='checkbox' tooltip='Whether or not the defense is perfect (minimum 0 damage).'
+  

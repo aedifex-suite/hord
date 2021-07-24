@@ -1,0 +1,33 @@
+class {
+  onCreate(input) {
+    this.state = {
+      toggled: false,
+      errors: [],
+    }
+    this.subscribeTo(input.link).on('refresh', () => {
+    })
+    this.subscribeTo(input.link).on('destroy', () => {
+      this.destroy({removeNode: false, recursive: false})
+    })
+    this.subscribeTo(input.link).on('errors', errors => {
+      this.state.errors = errors
+    })
+  }
+  onDestroy() {
+  }
+  onMount() {
+  }
+  onClick() {
+    this.state.toggled = !this.state.toggled
+  }
+}
+
+style {
+  .buts {
+    background: blue;
+  }
+}
+
+div.buts
+  button on-click('onClick') -- view toggle it
+  div -- ${state.toggled}

@@ -1,0 +1,68 @@
+import EnemySchema from '../schemata/specimen'
+
+class {
+  onCreate(input) {
+    this.state = {
+      errors: [],
+    }
+    this.subscribeTo(input.link).on('refresh', () => {
+      this.forceUpdate()
+    })
+    this.subscribeTo(input.link).on('destroy', () => {
+      this.destroy({removeNode: false, recursive: false})
+    })
+    this.subscribeTo(input.link).on('errors', errors => {
+      this.state.errors = errors
+      this.forceUpdate()
+    })
+  }
+  addEnemy() {
+    this.input.file.queue()
+    if (!this.input.file.state.specimens) {
+      this.input.file.state.specimens = []
+    }
+    this.input.file.state.specimens.push(EnemySchema.create())
+    this.input.file.unqueue()
+  }
+}
+
+style {
+  .HordEditor {
+  }
+  .HordEditor__Hordes__Controls {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .HordEditor__Hordes {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .HordEditor__Hordes__Items {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .HordEditor__Hordes__Items__Item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: .5em;
+    margin: .25em;
+    background: var(--listing-bg);
+  }
+}
+
+macro|{ renderBody, field }| name='ErrorableMacro'
+  span.errorable class=state.errors[field]?'-error':''
+    <${renderBody}/>
+    if(state.errors[field])
+      span.errorable__error -- ${state.errors[field]}
+
+section.HordEditor__General
+  DotInput errors=state.errors dot=input.dot field=`name` title='name' tooltip='Descriptive name of the specimens.'
+section.HordEditor__Hordes
+  div.HordEditor__Hordes__Controls
+    button on-click('addEnemy') -- add enemy
+  div.HordEditor__Hordes__Items
+    for|enemy, enemyIndex| of=input.dot['specimens']
+      $ let d = `specimens.${enemyIndex}`
+      Specimen file=input.file dot=input.dot field=d errors=state.errors

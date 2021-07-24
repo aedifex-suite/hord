@@ -1,0 +1,52 @@
+import {
+  AttackSchema,
+  DefenseSchema,
+} from '../../schemata/specimen'
+
+class {
+  addAttack() {
+    this.input.file.queue()
+    try {
+      let d = `${this.input.field}.attacks`
+      if (!this.input.dot[d]) {
+        this.input.dot[d] = []
+      }
+      this.input.dot[d].push(AttackSchema.create())
+    } catch(err) {
+      console.error(err)
+    }
+    this.input.file.unqueue()
+  }
+  addDefense() {
+    this.input.file.queue()
+    try {
+      let d = `${this.input.field}.defenses`
+      if (!this.input.dot[d]) {
+        this.input.dot[d] = []
+      }
+      this.input.dot[d].push(DefenseSchema.create())
+    } catch(err) {
+      console.error(err)
+    }
+    this.input.file.unqueue()
+  }
+}
+
+div.HordEditor__Hordes__Specimen
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.name` title='name' tooltip='Name of the specimen'
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.description` type='textarea' title='description' tooltip='Description of the specimen'
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.health` type='number' title='health tokens' tooltip='Specimen health tokens.'
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.move` type='number' title='move tokens' tooltip='Specimen move tokens.'
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.attack` type='number' title='attack tokens' tooltip='Specimen attack tokens.'
+  fieldset
+    legend -- attacks
+      button on-click('addAttack') -- ＋
+    if(input.dot[`${input.field}.attacks`])
+      for|attack,attackIndex| of=input.dot[`${input.field}.attacks`]
+        Attack errors=input.errors file=input.file dot=input.dot field=`${input.field}.attacks.${attackIndex}`
+  fieldset
+    legend -- defenses
+      button on-click('addDefense') -- ＋
+    if(input.dot[`${input.field}.defenses`])
+      for|defense,defenseIndex| of=input.dot[`${input.field}.defenses`]
+        Defense errors=input.errors file=input.file dot=input.dot field=`${input.field}.defenses.${defenseIndex}`

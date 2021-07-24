@@ -1,0 +1,14 @@
+import { DefenseTypes } from '../../../util/common'
+
+div.HordeEditor__Attack
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.name` title='name' tooltip='Attack name.'
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.attacktype` type='dropdown' list=['melee', 'ranged', 'launched', 'combo', 'other'] title='attack type' tooltip='Attack type.'
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.attack` title='attack' type='number' tooltip='Attack tokens.'
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.damage` title='damage' type='number' tooltip='Damage value.'
+  div -- TODO: damage type(s)
+  DamageTypes errors=input.errors dot=input.dot field=`${input.field}.damagetype` file=input.file
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.range` title='range' type='number' tooltip='Attack range.'
+  if(input.dot[`${input.field}.attacktype`] !== 'melee')
+    DotInput errors=input.errors dot=input.dot field=`${input.field}.radius` title='radius' type='number' tooltip='Attack radius.'
+  div -- TODO: properties
+  
