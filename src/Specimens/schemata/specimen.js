@@ -7,6 +7,8 @@ import {
   DamageTypeSchema,
   OptionalImageSchema,
   DefenseStringSchema,
+  SpecialSchema,
+  OptionalBooleanSchema,
 } from '../../schemata/common'
 
 import {
@@ -25,6 +27,7 @@ export const AttackSchema = schisma({
   damagetype: DamageTypeSchema,
   range: OptionalIntegerSchema,
   radius: OptionalIntegerSchema,
+  opportunistic: OptionalBooleanSchema,
   properties: [OptionalStringSchema]
 })
 
@@ -49,6 +52,10 @@ const SpecimenSchema = schisma({
     $required: false,
   },
   move: IntegerSchema,
+  specials: {
+    $type: [SpecialSchema],
+    $required: false,
+  }
 })
 
 export default SpecimenSchema

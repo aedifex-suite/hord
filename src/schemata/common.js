@@ -32,6 +32,11 @@ export const OptionalIntegerSchema = schisma({
   $required: false,
 })
 
+export const OptionalBooleanSchema = schisma({
+  $type: Boolean,
+  $required: false,
+})
+
 export const SimpleDamageTypeSchema = schisma({
   $type: String,
   $validate: v => {
@@ -63,4 +68,9 @@ export const DefenseStringSchema = schisma({
   $validate: v => {
     if (!DefenseTypes.includes(v)) return `field must be one of ${DefenseTypes.join(', ')}`
   },
+})
+
+export const SpecialSchema = schisma({
+  name: RequiredStringSchema,
+  description: OptionalStringSchema,
 })
