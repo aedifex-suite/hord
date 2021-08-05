@@ -64,5 +64,6 @@ section.HordEditor__Hordes
     button on-click('addEnemy') -- add enemy
   div.HordEditor__Hordes__Items
     for|enemy, enemyIndex| of=input.dot['specimens']
-      $ let d = `specimens.${enemyIndex}`
-      Specimen file=input.file dot=input.dot field=d errors=state.errors
+      div.HordEditor__Hordes__Items__Item
+        $ let d = `specimens.${enemyIndex}`
+        Specimen file=input.file dot=input.dot field=d errors=state.errors
