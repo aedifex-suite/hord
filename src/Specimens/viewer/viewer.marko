@@ -22,12 +22,11 @@ class {
   }
 }
 
-style {
-  .buts {
-    background: blue;
-  }
-}
+section.HordViewer__General
+  h1 -- ${input.dot['name']}
+section.HordViewer__Hordes
+  for|enemy, enemyIndex| of=input.dot['specimens']
+    div.HordViewer__Hordes__Item
+      $ let d = `specimens.${enemyIndex}`
+      Specimen dot=input.dot field=d config=input.config
 
-div.buts
-  button on-click('onClick') -- view toggle it
-  div -- ${state.toggled}

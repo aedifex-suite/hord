@@ -1,5 +1,5 @@
 import Editor from './editor/editor.marko'
-import Viewer from './viewer.marko'
+import Viewer from './viewer/viewer.marko'
 import SpecimensSchema from './schemata/specimens'
 
 export default {
