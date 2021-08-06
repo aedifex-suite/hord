@@ -28,9 +28,18 @@ class {
 }
 
 details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=!input.config[`toggles.${input.field}`]
-  summary
-    -- ${input.dot[`${input.field}.name`]}
-    button on-click(()=>component.emit('delete')) -- X
+  summary.HordEditor__AttackTitle
+    span.HordEditor__AttackTitle__Name -- ${input.dot[`${input.field}.name`]}
+      span.HordEditor__AttackTitle__SubTitles
+        span.HordEditor__Hordes__SpecimenTitle__Attack -- A ${input.dot[input.field+'.attack']}
+        span.HordEditor__Hordes__SpecimenTitle__Damage -- D ${input.dot[input.field+'.damage']}
+        if(input.dot[input.field+'.opportunistic'])
+          span.HordEditor__Hordes__SpecimenTitle__Opportunistic -- O
+        if(input.dot[input.field+'.range'])
+          span.HordEditor__Hordes__SpecimenTitle__Range -- R ${input.dot[input.field+'.range']}
+        if(input.dot[input.field+'.radius'])
+          span.HordEditor__Hordes__SpecimenTitle__Radius -- r ${input.dot[input.field+'.radius']}
+    button on-click(()=>component.emit('delete')) -- ❌
   div.HordeEditor__Attack
     DotInput errors=input.errors dot=input.dot field=`${input.field}.name` title='name' tooltip='Attack name.'
     DotInput errors=input.errors dot=input.dot field=`${input.field}.attacktype` type='dropdown' list=['melee', 'ranged', 'launched', 'combo', 'other'] title='attack type' tooltip='Attack type.'
@@ -49,3 +58,16 @@ details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=
         for|property,propertyIndex| of=input.dot[`${input.field}.properties`]
           Property on-delete('deleteProperty', propertyIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.properties.${propertyIndex}` config=input.config
 
+style {
+  .HordEditor__AttackTitle {
+    display: inline-grid;
+    width: 100%;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+  }
+  .HordEditor__AttackTitle__SubTitles > * {
+    margin-left: 1em;
+    opacity: 0.75;
+    font-size: 70%;
+  }
+}
