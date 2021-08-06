@@ -4,7 +4,7 @@ export function calculateCV(t) {
   if (t.combatvalue) return t.combatvalue
   let v = 0
   if (t.health) {
-    v += t.health
+    v += 1 + t.health/2
   }
   if(t.move) {
     v += t.move
@@ -49,5 +49,13 @@ export function calculateCV(t) {
 export function calculateHealthAverage(tokens) {
   let h = 1
   h += tokens/2
+  return h
+}
+
+export function calculateHealth(tokens) {
+  let h = 1
+  for (let i = 0; i < tokens; i++) {
+    h += Math.floor(Math.random()*2)
+  }
   return h
 }
