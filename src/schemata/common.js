@@ -79,3 +79,9 @@ export const SpecialSchema = schisma({
   name: RequiredStringSchema,
   description: OptionalStringSchema,
 })
+
+export const PropertySchema = SpecialSchema
+export const OptionalPropertiesSchema = schisma({
+  $type: [PropertySchema],
+  $required: false,
+})
