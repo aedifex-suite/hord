@@ -9,6 +9,7 @@ class {
     this.state = {
       health: calculateHealthAverage(input.dot[input.field+'.health'])
     }
+    this.healths = []
   }
   rollHealth(e) {
     if (e.which === 3) {
@@ -16,6 +17,17 @@ class {
     } else {
       this.state.health = calculateHealth(this.input.dot[this.input.field+'.health'])
     }
+    this.secretPendingHealth(this.state.health)
+  }
+  secretPendingHealth(health) {
+    this.healths = [...this.healths, health]
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+    }
+    this.timeout = setTimeout(() => {
+      console.log(this.input.dot[this.input.field+'.name']+': ', this.healths.join(', '))
+      this.healths = []
+    }, 1000)
   }
 }
 
