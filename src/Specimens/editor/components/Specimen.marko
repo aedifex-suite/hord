@@ -67,6 +67,12 @@ class {
 }
 
 style {
+  .HordEditor__Hordes__SpecimenTitle {
+    display: inline-grid;
+    width: 100%;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+  }
   .HordEditor__Hordes__SpecimenTitle__CombatValue {
     margin-left: 1em;
     opacity: 0.75;
@@ -74,11 +80,11 @@ style {
   }
 }
 
-details
-  summary
-    span.HordEditor__Hordes__SpecimenTitle -- ${input.dot[`${input.field}.name`]}
-    span.HordEditor__Hordes__SpecimenTitle__CombatValue -- ${calculateCV(input.dot[input.field])} CV
-    button on-click(()=>component.emit('delete')) -- X
+details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=input.config[`toggles.${input.field}`]
+  summary.HordEditor__Hordes__SpecimenTitle
+    span.HordEditor__Hordes__SpecimenTitle__Name -- ${input.dot[`${input.field}.name`]}
+      span.HordEditor__Hordes__SpecimenTitle__CombatValue -- ${calculateCV(input.dot[input.field])} CV
+    button on-click(()=>component.emit('delete')) -- ❌
   div.HordEditor__Hordes__Specimen
     DotInput errors=input.errors dot=input.dot field=`${input.field}.name` title='name' tooltip='Name of the specimen'
     DotInput errors=input.errors dot=input.dot placeholder=calculateCV(input.dot[input.field]) field=`${input.field}.combatvalue` type='number' title='combat value' tooltip='Combat value of the specimen'
@@ -91,16 +97,16 @@ details
         button on-click('addAttack') -- ＋
       if(input.dot[`${input.field}.attacks`])
         for|attack,attackIndex| of=input.dot[`${input.field}.attacks`]
-          Attack on-delete('deleteAttack', attackIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.attacks.${attackIndex}`
+          Attack on-delete('deleteAttack', attackIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.attacks.${attackIndex}` config=input.config
     fieldset
       legend -- defenses
         button on-click('addDefense') -- ＋
       if(input.dot[`${input.field}.defenses`])
         for|defense,defenseIndex| of=input.dot[`${input.field}.defenses`]
-          Defense on-delete('deleteDefense', defenseIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.defenses.${defenseIndex}`
+          Defense on-delete('deleteDefense', defenseIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.defenses.${defenseIndex}` config=input.config
     fieldset
       legend -- specials
         button on-click('addSpecial') -- +
       if(input.dot[`${input.field}.specials`])
         for|special,specialIndex| of=input.dot[`${input.field}.specials`]
-          Special on-delete('deleteSpecial', specialIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.specials.${specialIndex}`
+          Special on-delete('deleteSpecial', specialIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.specials.${specialIndex}` config=input.config

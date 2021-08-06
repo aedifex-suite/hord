@@ -69,4 +69,4 @@ section.HordEditor__Hordes
     for|enemy, enemyIndex| of=input.dot['specimens']
       div.HordEditor__Hordes__Items__Item
         $ let d = `specimens.${enemyIndex}`
-        Specimen on-delete('deleteEnemy', enemyIndex) file=input.file dot=input.dot field=d errors=state.errors
+        Specimen on-delete('deleteEnemy', enemyIndex) file=input.file dot=input.dot field=d errors=state.errors config=input.config
