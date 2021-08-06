@@ -78,6 +78,7 @@ details
   summary
     span.HordEditor__Hordes__SpecimenTitle -- ${input.dot[`${input.field}.name`]}
     span.HordEditor__Hordes__SpecimenTitle__CombatValue -- ${calculateCV(input.dot[input.field])} CV
+    button on-click(()=>component.emit('delete')) -- X
   div.HordEditor__Hordes__Specimen
     DotInput errors=input.errors dot=input.dot field=`${input.field}.name` title='name' tooltip='Name of the specimen'
     DotInput errors=input.errors dot=input.dot placeholder=calculateCV(input.dot[input.field]) field=`${input.field}.combatvalue` type='number' title='combat value' tooltip='Combat value of the specimen'

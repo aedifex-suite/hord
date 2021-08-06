@@ -24,6 +24,9 @@ class {
     this.input.file.state.specimens.push(EnemySchema.create())
     this.input.file.unqueue()
   }
+  deleteEnemy(index) {
+    this.input.file.state.specimens = this.input.file.state.specimens.filter((_,i)=>i!==index)
+  }
 }
 
 style {
@@ -66,4 +69,4 @@ section.HordEditor__Hordes
     for|enemy, enemyIndex| of=input.dot['specimens']
       div.HordEditor__Hordes__Items__Item
         $ let d = `specimens.${enemyIndex}`
-        Specimen file=input.file dot=input.dot field=d errors=state.errors
+        Specimen on-delete('deleteEnemy', enemyIndex) file=input.file dot=input.dot field=d errors=state.errors
