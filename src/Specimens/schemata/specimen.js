@@ -10,6 +10,7 @@ import {
   DefenseStringSchema,
   SpecialSchema,
   OptionalBooleanSchema,
+  OptionalPropertiesSchema,
 } from '../../schemata/common'
 
 import {
@@ -29,7 +30,7 @@ export const AttackSchema = schisma({
   range: OptionalIntegerSchema,
   radius: OptionalIntegerSchema,
   opportunistic: OptionalBooleanSchema,
-  properties: [OptionalStringSchema]
+  properties: OptionalPropertiesSchema,
 })
 
 export const DefenseSchema = schisma({
