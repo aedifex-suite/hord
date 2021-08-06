@@ -1,4 +1,8 @@
-div.HordEditor__Special
-  DotInput errors=input.errors dot=input.dot field=`${input.field}.name` title='name' tooltip='Name'
-  DotInput errors=input.errors dot=input.dot field=`${input.field}.description` type='textarea' title='description' tooltip='Description of the special'
-  
+details
+  summary
+    -- ${input.dot[`${input.field}.name`]}
+    button on-click(()=>component.emit('delete')) -- X
+  div.HordEditor__Special
+    DotInput errors=input.errors dot=input.dot field=`${input.field}.name` title='name' tooltip='Name'
+    DotInput errors=input.errors dot=input.dot field=`${input.field}.description` type='textarea' title='description' tooltip='Description of the special'
+    

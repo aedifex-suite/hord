@@ -7,6 +7,10 @@ import {
   SpecialSchema,
 } from '../../../schemata/common'
 
+import {
+  calculateCV,
+} from '../../../util/calc'
+
 class {
   addAttack() {
     this.input.file.queue()
@@ -21,6 +25,10 @@ class {
     }
     this.input.file.unqueue()
   }
+  deleteAttack(index) {
+    let d = `${this.input.field}.attacks`
+    this.input.dot[d] = this.input.dot[d].filter((_,i)=>i!==index)
+  }
   addDefense() {
     this.input.file.queue()
     try {
@@ -33,6 +41,10 @@ class {
       console.error(err)
     }
     this.input.file.unqueue()
+  }
+  deleteDefense(index) {
+    let d = `${this.input.field}.defenses`
+    this.input.dot[d] = this.input.dot[d].filter((_,i)=>i!==index)
   }
   addSpecial() {
     this.input.file.queue()
@@ -48,12 +60,28 @@ class {
     this.input.file.unqueue()
 
   }
+  deleteSpecial(index) {
+    let d = `${this.input.field}.specials`
+    this.input.dot[d] = this.input.dot[d].filter((_,i)=>i!==index)
+  }
+}
+
+style {
+  .HordEditor__Hordes__SpecimenTitle__CombatValue {
+    margin-left: 1em;
+    opacity: 0.75;
+    font-size: 70%;
+  }
 }
 
 details
-  summary -- ${input.dot[`${input.field}.name`]}
+  summary
+    span.HordEditor__Hordes__SpecimenTitle -- ${input.dot[`${input.field}.name`]}
+    span.HordEditor__Hordes__SpecimenTitle__CombatValue -- ${calculateCV(input.dot[input.field])} CV
   div.HordEditor__Hordes__Specimen
     DotInput errors=input.errors dot=input.dot field=`${input.field}.name` title='name' tooltip='Name of the specimen'
+    $ console.log('wtf', input.field+'.combatvalue', input.dot[input.field+'.combatvalue'], input.dot)
+    DotInput errors=input.errors dot=input.dot placeholder=calculateCV(input.dot[input.field]) field=`${input.field}.combatvalue` type='number' title='combat value' tooltip='Combat value of the specimen'
     DotInput errors=input.errors dot=input.dot field=`${input.field}.description` type='textarea' title='description' tooltip='Description of the specimen'
     DotInput errors=input.errors dot=input.dot field=`${input.field}.health` type='number' title='health tokens' tooltip='Specimen health tokens.'
     DotInput errors=input.errors dot=input.dot field=`${input.field}.move` type='number' title='move tokens' tooltip='Specimen move tokens.'
@@ -63,16 +91,16 @@ details
         button on-click('addAttack') -- ＋
       if(input.dot[`${input.field}.attacks`])
         for|attack,attackIndex| of=input.dot[`${input.field}.attacks`]
-          Attack errors=input.errors file=input.file dot=input.dot field=`${input.field}.attacks.${attackIndex}`
+          Attack on-delete('deleteAttack', attackIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.attacks.${attackIndex}`
     fieldset
       legend -- defenses
         button on-click('addDefense') -- ＋
       if(input.dot[`${input.field}.defenses`])
         for|defense,defenseIndex| of=input.dot[`${input.field}.defenses`]
-          Defense errors=input.errors file=input.file dot=input.dot field=`${input.field}.defenses.${defenseIndex}`
+          Defense on-delete('deleteDefense', defenseIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.defenses.${defenseIndex}`
     fieldset
       legend -- specials
         button on-click('addSpecial') -- +
       if(input.dot[`${input.field}.specials`])
         for|special,specialIndex| of=input.dot[`${input.field}.specials`]
-          Special errors=input.errors file=input.file dot=input.dot field=`${input.field}.specials.${specialIndex}`
+          Special on-delete('deleteSpecial', specialIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.specials.${specialIndex}`
