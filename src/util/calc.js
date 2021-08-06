@@ -45,3 +45,9 @@ export function calculateCV(t) {
 
   return Math.round(v)
 }
+
+export function calculateHealthAverage(tokens) {
+  let h = 1
+  h += tokens/2
+  return h
+}
