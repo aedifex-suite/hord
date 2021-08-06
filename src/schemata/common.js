@@ -23,6 +23,11 @@ export const IntegerSchema = schisma({
   $required: true,
 })
 
+export const OptionalFloatSchema = schisma({
+  $type: Number,
+  $required: false,
+})
+
 export const OptionalIntegerSchema = schisma({
   $type: Number,
   $validate: v => {
