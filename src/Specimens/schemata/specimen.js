@@ -4,6 +4,7 @@ import {
   OptionalStringSchema,
   IntegerSchema,
   OptionalIntegerSchema,
+  OptionalFloatSchema,
   DamageTypeSchema,
   OptionalImageSchema,
   DefenseStringSchema,
@@ -43,6 +44,7 @@ const SpecimenSchema = schisma({
   health: IntegerSchema,
   move: IntegerSchema,
   attack: IntegerSchema,
+  combatvalue: OptionalFloatSchema,
   defenses: {
     $type: [DefenseSchema],
     $required: false,
