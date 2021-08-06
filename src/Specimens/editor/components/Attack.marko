@@ -1,4 +1,31 @@
 import { DefenseTypes } from '../../../util/common'
+import { PropertySchema } from '../../../schemata/common'
+
+class {
+  addProperty() {
+    let d = `${this.input.field}.properties`
+    this.input.file.queue()
+    try {
+      let d = `${this.input.field}.properties`
+        if (!this.input.dot[d]) {
+          this.input.dot[d] = []
+        }
+        this.input.dot[d].push(PropertySchema.create())
+    } catch(err) {
+      console.error(err)
+    }
+    this.input.file.unqueue()
+  }
+  deleteProperty(index) {
+    this.input.file.queue()
+    let d = `${this.input.field}.properties`
+    this.input.dot[d] = this.input.dot[d].filter((_,i)=>i!==index)
+    if (this.input.dot[d].length === 0) {
+      delete this.input.dot[d]
+    }
+    this.input.file.unqueue()
+  }
+}
 
 details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=!input.config[`toggles.${input.field}`]
   summary
@@ -15,4 +42,10 @@ details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=
     DotInput errors=input.errors dot=input.dot field=`${input.field}.range` title='range' type='number' tooltip='Attack range.'
     if(input.dot[`${input.field}.attacktype`] !== 'melee')
       DotInput errors=input.errors dot=input.dot field=`${input.field}.radius` title='radius' type='number' tooltip='Attack radius.'
-    div -- TODO: properties
+    fieldset
+      legend -- properties
+        button on-click('addProperty') -- ＋
+      if(input.dot[`${input.field}.properties`])
+        for|property,propertyIndex| of=input.dot[`${input.field}.properties`]
+          Property on-delete('deleteProperty', propertyIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.properties.${propertyIndex}` config=input.config
+
