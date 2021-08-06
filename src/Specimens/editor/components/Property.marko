@@ -1,7 +1,7 @@
 details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=!input.config[`toggles.${input.field}`]
   summary
     -- ${input.dot[`${input.field}.name`]}
-    button on-click(()=>component.emit('delete')) -- X
+    button on-click(()=>component.emit('delete')) -- ❌
   div.HordEditor__Property
     DotInput errors=input.errors dot=input.dot field=`${input.field}.name` title='Description' tooltip='Property'
     DotInput errors=input.errors dot=input.dot field=`${input.field}.description` type='textarea' title='Description' tooltip='Property'
