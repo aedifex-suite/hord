@@ -1,0 +1,40 @@
+import {
+  calculateCV,
+  calculateHealthAverage,
+  calculateHealth,
+} from '../../../util/calc'
+
+class {
+  onCreate(input) {
+    this.state = {
+      health: calculateHealthAverage(input.dot[input.field+'.health'])
+    }
+  }
+  rollHealth(e) {
+    if (e.which === 3) {
+      this.state.health = calculateHealthAverage(this.input.dot[this.input.field+'.health'])
+    } else {
+      this.state.health = calculateHealth(this.input.dot[this.input.field+'.health'])
+    }
+  }
+}
+
+div.HordViewer__Specimen
+  h2 -- ${input.dot[input.field+'.name']}
+  div.HordViewer__Specimen__Summary
+    span -- ${calculateCV(input.dot[input.field])} CV
+    span -- Health ${input.dot[input.field+'.health']}
+    span.-clickable on-click('rollHealth') on-contextmenu('rollHealth') -- (${state.health})
+    span -- Move ${input.dot[input.field+'.move']}
+    span -- Attack ${input.dot[input.field+'.attack']}
+
+style {
+  .HordViewer__Specimen__Summary > * {
+    margin-left: 1em;
+  }
+  .-clickable {
+    text-decoration: underline;
+    user-select: none;
+    cursor: pointer;
+  }
+}
