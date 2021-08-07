@@ -54,12 +54,6 @@ style {
   }
 }
 
-macro|{ renderBody, field }| name='ErrorableMacro'
-  span.errorable class=state.errors[field]?'-error':''
-    <${renderBody}/>
-    if(state.errors[field])
-      span.errorable__error -- ${state.errors[field]}
-
 section.HordEditor__General
   DotInput errors=state.errors dot=input.dot field=`name` title='name' tooltip='Descriptive name of the specimens.'
 section.HordEditor__Hordes

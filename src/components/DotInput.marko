@@ -17,15 +17,9 @@ class {
   }
 }
 
-macro|{ renderBody, field }| name='ErrorableMacro'
-  span.errorable class=input.errors[field]?'-error':''
-    <${renderBody}/>
-    if(input.errors[field])
-      span.errorable__error -- ${input.errors[field]}
-
 label.InputPair class=`-${input.type}`
   span.InputPair__name -- ${input.title}
-  ErrorableMacro field=input.field
+  ErrorableMacro errors=input.errors field=input.field
     if(input.type==='dropdown')
       select.InputPair__input on-change(e=>input.dot[input.field]=e.target.value)
         if(!input.list||input.list.length===0)
