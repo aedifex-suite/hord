@@ -82,13 +82,14 @@ style {
 }
 
 details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=input.config[`toggles.${input.field}`]
-  summary.HordEditor__Hordes__SpecimenTitle
-    span.HordEditor__Hordes__SpecimenTitle__Name -- ${input.dot[`${input.field}.name`]}
-      span.HordEditor__Hordes__SpecimenTitle__SubTitles
-        span.HordEditor__Hordes__SpecimenTitle__CombatValue -- ${calculateCV(input.dot[input.field])} CV
-        span.HordEditor__Hordes__SpecimenTitle__Health -- H ${calculateHealthAverage(input.dot[input.field+'.health'])}
-        span.HordEditor__Hordes__SpecimenTitle__Move -- M ${input.dot[input.field+'.move']}
-        span.HordEditor__Hordes__SpecimenTitle__Attack -- A ${input.dot[input.field+'.attack']}
+  summary.-titleAndButtons
+    span
+      span -- ${input.dot[`${input.field}.name`]}
+      span
+        span -- ${calculateCV(input.dot[input.field])} CV
+        span -- H ${calculateHealthAverage(input.dot[input.field+'.health'])}
+        span -- M ${input.dot[input.field+'.move']}
+        span -- A ${input.dot[input.field+'.attack']}
     button on-click(()=>component.emit('delete')) -- ❌
   div.HordEditor__Hordes__Specimen
     DotInput errors=input.errors dot=input.dot field=`${input.field}.name` title='name' tooltip='Name of the specimen'
