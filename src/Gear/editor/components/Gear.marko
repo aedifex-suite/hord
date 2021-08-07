@@ -1,0 +1,42 @@
+class {
+  changeType(e) {
+    switch(e.target.value) {
+      case 'weapon':
+        this.input.dot[this.input.field] = GearWeaponSchema.conform({...this.input.dot[this.input.field], type: 'weapon'})
+        break
+      case 'armor':
+        this.input.dot[this.input.field] = GearArmorSchema.conform({...this.input.dot[this.input.field], type: 'armor'})
+        break
+      case 'consumable':
+        this.input.dot[this.input.field] = GearConsumableSchema.conform({...this.input.dot[this.input.field], type: 'consumable'})
+        break
+      case 'wealth':
+        this.input.dot[this.input.field] = GearWealthSchema.conform({...this.input.dot[this.input.field], type: 'wealth'})
+        break
+      case 'misc':
+        this.input.dot[this.input.field] = GearMiscSchema.conform({...this.input.dot[this.input.field], type: 'misc'})
+        break
+      default:
+      return
+    }
+  }
+}
+
+details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=input.config[`toggles.${input.field}`]
+  summary.-titleAndButtons
+    span
+      -- ${input.dot[`${input.field}.name`]}
+      span
+    button on-click(()=>component.emit('delete')) -- ❌
+  div.HordEditor__Gear__Item
+    label.HordEditor__Input
+      span.HordEditor__Input__name -- type
+      ErrorableMacro errors=input.errors field=`${input.field}.type`
+        select.HordEditor__Input__input on-change('changeType')
+          for|item| of=['weapon', 'armor', 'consumable', 'wealth', 'misc']
+            option selected=input.dot[`${input.field}.type`]===item value=item -- ${item}
+    DotInput errors=input.errors dot=input.dot field=`${input.field}.name` title='name' tooltip='Descriptive name of the gear.'
+    DotInput errors=input.errors dot=input.dot field=`${input.field}.description` title='description' tooltip='Description.' type='textarea'
+    DotInput errors=input.errors dot=input.dot field=`${input.field}.worth` type='number' title='worth' tooltip='Base wealth value.'
+    if(input.dot[input.field+'.type'] === 'weapon')
+      Weapon dot=input.dot field=input.field errors=input.errors

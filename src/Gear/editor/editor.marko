@@ -73,6 +73,9 @@ class {
     this.input.file.state.gear.push(g)
     this.input.file.unqueue()
   }
+  deleteGear(index) {
+    this.input.file.state.gear = this.input.file.state.gear.filter((_,i)=>i!==index)
+  }
 }
 
 style {
@@ -106,33 +109,6 @@ style {
   }
 }
 
-macro|{ renderBody, field }| name='ErrorableMacro'
-  span.errorable class=state.errors[field]?'-error':''
-    <${renderBody}/>
-    if(state.errors[field])
-      span.errorable__error -- ${state.errors[field]}
-
-macro|{ type, field, placeholder, title, list }| name='InputMacro'
-  $ let convertEvent = e => {
-    if (type === 'number') return Number(e.target.value)
-    if (type === 'checkbox') return e.target.checked
-    return e.target.value
-  }
-  label.HordEditor__Entry
-    span.HordEditor__Entry__name -- ${title}
-      ErrorableMacro field=field
-        if(type==='dropdown')
-          select on-change('changeType', field)
-            if(!list||list.length===0)
-              option -- missing list
-            else
-              for|item| of=list
-                $ let title = typeof item==='string'?item:item.title
-                $ let option = typeof item==='string'?item:item.option
-                option selected=input.dot[field]===option value=option -- ${title}
-        else
-          input.HordEditor__Entry__input type=type value=input.dot[field] placeholder=placeholder on-change(e=>input.dot[field]=convertEvent(e))
-
 section.HordEditor__General
   DotInput errors=state.errors dot=input.dot field=`name` title='name' tooltip='Descriptive name of the gear selection.'
 section.HordEditor__Gear
@@ -146,14 +122,4 @@ section.HordEditor__Gear
       for|gear, gearIndex| of=input.dot['gear']
         div.HordEditor__Gear__Items__Item
           $ let d = `gear.${gearIndex}`
-          label.HordEditor__Input
-            span.HordEditor__Input__name -- type
-            ErrorableMacro field=`${d}.type`
-              select.HordEditor__Input__input on-change('changeType', d)
-                for|item| of=['weapon', 'armor', 'consumable', 'wealth', 'misc']
-                  option selected=input.dot[`${d}.type`]===item value=item -- ${item}
-          DotInput errors=state.errors dot=input.dot field=`${d}.name` title='name' tooltip='Descriptive name of the gear.'
-          DotInput errors=state.errors dot=input.dot field=`${d}.description` title='description' tooltip='Description.' type='textarea'
-          DotInput errors=state.errors dot=input.dot field=`${d}.worth` type='number' title='worth' tooltip='Base wealth value.'
-          if(gear.type === 'weapon')
-            Weapon dot=input.dot field=d errors=state.errors
+          Gear on-delete('deleteGear', gearIndex) file=input.file dot=input.dot field=d errors=state.errors config=input.config
