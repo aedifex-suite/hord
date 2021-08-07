@@ -1,0 +1,4 @@
+span.errorable class=input.errors[input.field]?'-error':''
+  <${input.renderBody}/>
+  if(input.errors[input.field])
+    span.errorable__error -- ${input.errors[input.field]}
