@@ -1,0 +1,39 @@
+import { SimpleDamageTypeSchema } from '../../../schemata/common'
+
+class {
+   addDefense() {
+    this.input.file.queue()
+    console.log("adding defense", JSON.stringify(this.input.dot[`${this.input.field}`]))
+    try {
+      let d = `${this.input.field}.defense`
+      if (!this.input.dot[d]) {
+        this.input.dot[d] = []
+      }
+      this.input.dot[d].push(SimpleDamageTypeSchema.create())
+    } catch(err) {
+      console.error(err)
+    }
+    this.input.file.unqueue()
+    console.log("added defense", JSON.stringify(this.input.dot[`${this.input.field}`]))
+  }
+  deleteDefense(index) {
+    let d = `${this.input.field}.defense`
+    this.input.dot[d] = this.input.dot[d].filter((_,i)=>i!==index)
+  }
+}
+
+$ console.log(input.dot[`${input.field}`])
+div.HordEditor__Gear__Armor
+  fieldset
+    legend -- defenses
+      button on-click('addDefense') -- ＋
+    if(input.dot[`${input.field}.defense`])
+      for|defense,defenseIndex| of=input.dot[`${input.field}.defense`]
+        Damage on-delete('deleteDefense', defenseIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.defense.${defenseIndex}` config=input.config
+
+style {
+  .HordEditor__Gear__Armor {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

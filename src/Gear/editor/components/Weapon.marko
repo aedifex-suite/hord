@@ -1,9 +1,35 @@
+import { PropertySchema, SimpleDamageTypeSchema } from '../../../schemata/common'
+
+class {
+  addDamage() {
+    this.input.file.queue()
+    try {
+      let d = `${this.input.field}.damage`
+      if (!this.input.dot[d]) {
+        this.input.dot[d] = []
+      }
+      this.input.dot[d].push(SimpleDamageTypeSchema.create())
+    } catch(err) {
+      console.error(err)
+    }
+    this.input.file.unqueue()
+  }
+  deleteDamage(index) {
+    let d = `${this.input.field}.damage`
+    this.input.dot[d] = this.input.dot[d].filter((_,i)=>i!==index)
+  }
+}
+
 div.HordEditor__Gear__Weapon
   DotInput errors=input.errors dot=input.dot field=`${input.field}.weapontype` type='dropdown' list=['melee', 'ranged', 'launched', 'combo', 'other'] title='weapon type' tooltip='Weapon type.'
   /** combat stats **/
   DotInput errors=input.errors dot=input.dot field=`${input.field}.attack` type='number' title='attack tokens' tooltip='Base attack token cost.'
-  DotInput errors=input.errors dot=input.dot field=`${input.field}.damage` type='number' title='damage' tooltip='Base damage inflict value.'
-  DotInput errors=input.errors dot=input.dot field=`${input.field}.damagetype` type='dropdown' list=['generic', 'stab', 'slash', 'bludgeon'] title='damage type' tooltip='Damage types'
+  fieldset
+    legend -- damage
+      button on-click('addDamage') -- ＋
+    if(input.dot[`${input.field}.damage`])
+      for|damage,damageIndex| of=input.dot[`${input.field}.damage`]
+        Damage on-delete('deleteDamage', damageIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.damage.${damageIndex}` config=input.config
   DotInput errors=input.errors dot=input.dot field=`${input.field}.range` type='number' title='range' tooltip='Range, as expressed in tiles.'
   DotInput errors=input.errors dot=input.dot field=`${input.field}.capacity` type='number' title='capacity' tooltip='Capacity for weapons that have it, such as handbows or flametongues.'
   DotInput errors=input.errors dot=input.dot field=`${input.field}.radius` type='number' title='radius' tooltip='Radius for weaponry such as thrown explosives.'

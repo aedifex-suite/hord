@@ -17,7 +17,11 @@ export function calculateCV(t) {
     let avgAtk = 0
     let hasOpportunity = 0
     for (let a of t.attacks) {
-      avgDmg += a.damage
+      let aDmg = 0
+      for (let d of a.damage) {
+        aDmg += d.value
+      }
+      avgDmg += aDmg / a.damage.length
       avgAtk += a.attack
       if (a.opportunistic) {
         hasOpportunity = 1

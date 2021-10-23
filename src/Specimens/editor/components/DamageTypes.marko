@@ -33,6 +33,16 @@ fieldset
         $ let d = `${input.field}.${damageIndex}`
         DotDeleteable errors=input.errors dot=input.dot field=d type='dropdown' list=DefenseTypes on-delete('removeDamageType', damageIndex)
 
+details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=!input.config[`toggles.${input.field}`]
+  summary
+    -- ${input.dot[`${input.field}.type`]}
+    button on-click(()=>component.emit('delete')) -- ❌
+  div.HordeEditor__Defense
+    DotInput errors=input.errors dot=input.dot field=`${input.field}.type` title='type' list=DefenseTypes type='dropdown' tooltip='Defense type.'
+    DotInput errors=input.errors dot=input.dot field=`${input.field}.value` title='value' type='number' tooltip='Defense value.'
+    DotInput errors=input.errors dot=input.dot field=`${input.field}.perfect` title='perfect' type='checkbox' tooltip='Whether or not the defense is perfect (minimum 0 damage).'
+  
+
 style {
   .HordEditor__DamageTypes {
     display: flex;

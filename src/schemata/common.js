@@ -42,7 +42,7 @@ export const OptionalBooleanSchema = schisma({
   $required: false,
 })
 
-export const SimpleDamageTypeSchema = schisma({
+export const SimpleStrikeTypeSchema = schisma({
   $type: String,
   $validate: v => {
     let t = ['generic', 'stab', 'slash', 'bludgeon']
@@ -50,12 +50,34 @@ export const SimpleDamageTypeSchema = schisma({
   },
 })
 
+export const ComplexStrikeTypeSchema = schisma({
+  $type: [[SimpleStrikeTypeSchema]],
+})
+
+export const StrikeTypeSchema = schisma({
+  $typeof: [ComplexStrikeTypeSchema, SimpleStrikeTypeSchema],
+  $required: true,
+})
+
+export const DefenseStringSchema = schisma({
+  $type: String,
+  $validate: v => {
+    if (!DefenseTypes.includes(v)) return `field must be one of ${DefenseTypes.join(', ')}`
+  },
+})
+
+export const SimpleDamageTypeSchema = schisma({
+  type: DefenseStringSchema,
+  value: IntegerSchema,
+  perfect: OptionalBooleanSchema,
+})
+
 export const ComplexDamageTypeSchema = schisma({
-  $type: [[SimpleDamageTypeSchema]],
+  $type: [SimpleDamageTypeSchema],
 })
 
 export const DamageTypeSchema = schisma({
-  $typeof: [SimpleDamageTypeSchema, ComplexDamageTypeSchema],
+  $typeof: [ComplexDamageTypeSchema, SimpleDamageTypeSchema],
   $required: true,
 })
 
@@ -66,13 +88,6 @@ export const OptionalImageSchema = schisma({
     if (!v.match(/^data:image\/[a-z]+;base64,/)) return 'field must be a base64-encoded value'
   },
   $required: false,
-})
-
-export const DefenseStringSchema = schisma({
-  $type: String,
-  $validate: v => {
-    if (!DefenseTypes.includes(v)) return `field must be one of ${DefenseTypes.join(', ')}`
-  },
 })
 
 export const SpecialSchema = schisma({

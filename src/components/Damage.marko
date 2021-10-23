@@ -1,0 +1,10 @@
+import { DefenseTypes } from '../util/common'
+
+details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=!input.config[`toggles.${input.field}`]
+  summary
+    -- ${input.dot[`${input.field}.type`]} ${input.dot[`${input.field}.value`]}
+    button on-click(()=>component.emit('delete')) -- ❌
+  div.HordeEditor__Damage
+    DotInput errors=input.errors dot=input.dot field=`${input.field}.type` title='type' list=DefenseTypes type='dropdown' tooltip='Damage type.'
+    DotInput errors=input.errors dot=input.dot field=`${input.field}.value` title='value' type='number' tooltip='Damage value.'
+  

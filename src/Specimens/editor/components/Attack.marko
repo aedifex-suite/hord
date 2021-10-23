@@ -1,5 +1,5 @@
 import { DefenseTypes } from '../../../util/common'
-import { PropertySchema } from '../../../schemata/common'
+import { PropertySchema, DamageTypeSchema } from '../../../schemata/common'
 
 class {
   addProperty() {
@@ -25,6 +25,31 @@ class {
     }
     this.input.file.unqueue()
   }
+  addDamage() {
+    this.input.file.queue()
+    try {
+      let d = `${this.input.field}.damage`
+      if (!this.input.dot[d]) {
+        this.input.dot[d] = []
+      }
+      this.input.dot[d].push(DamageTypeSchema.create())
+    } catch(err) {
+      console.error(err)
+    }
+    this.input.file.unqueue()
+  }
+  deleteDamage(index) {
+    let d = `${this.input.field}.damage`
+    this.input.dot[d] = this.input.dot[d].filter((_,i)=>i!==index)
+  }
+  getDamageString() {
+    let s = ''
+    let d = this.input.dot[`${this.input.field}.damage`]
+    for (let dmg of d) {
+      s += dmg.type[0]+dmg.value
+    }
+    return s
+  }
 }
 
 details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=!input.config[`toggles.${input.field}`]
@@ -32,7 +57,7 @@ details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=
     span.HordEditor__AttackTitle__Name -- ${input.dot[`${input.field}.name`]}
       span.HordEditor__AttackTitle__SubTitles
         span.HordEditor__Hordes__SpecimenTitle__Attack -- A ${input.dot[input.field+'.attack']}
-        span.HordEditor__Hordes__SpecimenTitle__Damage -- D ${input.dot[input.field+'.damage']}
+        span.HordEditor__Hordes__SpecimenTitle__Damage -- D ${component.getDamageString()}
         if(input.dot[input.field+'.opportunistic'])
           span.HordEditor__Hordes__SpecimenTitle__Opportunistic -- O
         if(input.dot[input.field+'.range'])
@@ -45,9 +70,13 @@ details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=
     DotInput errors=input.errors dot=input.dot field=`${input.field}.attacktype` type='dropdown' list=['melee', 'ranged', 'launched', 'combo', 'other'] title='attack type' tooltip='Attack type.'
     DotInput errors=input.errors dot=input.dot field=`${input.field}.attack` title='attack' type='number' tooltip='Attack tokens.'
     DotInput errors=input.errors dot=input.dot field=`${input.field}.damage` title='damage' type='number' tooltip='Damage value.'
+    fieldset
+      legend -- damage
+        button on-click('addDamage') -- ＋
+      if(input.dot[`${input.field}.damage`])
+        for|damage,damageIndex| of=input.dot[`${input.field}.damage`]
+          Damage on-delete('deleteDamage', damageIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.damage.${damageIndex}` config=input.config
     DotInput errors=input.errors dot=input.dot field=`${input.field}.opportunistic` title='opportunistic' type='checkbox' tooltip='If the attack can be made opportunistically.'
-    div -- TODO: damage type(s)
-    DamageTypes errors=input.errors dot=input.dot field=`${input.field}.damagetype` file=input.file
     DotInput errors=input.errors dot=input.dot field=`${input.field}.range` title='range' type='number' tooltip='Attack range.'
     if(input.dot[`${input.field}.attacktype`] !== 'melee')
       DotInput errors=input.errors dot=input.dot field=`${input.field}.radius` title='radius' type='number' tooltip='Attack radius.'

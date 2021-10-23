@@ -6,4 +6,7 @@ export const DefenseTypes = [
   'ice',
   'physical',
   'electric',
+  'acid',
+  'sonic',
+  'psychic',
 ]

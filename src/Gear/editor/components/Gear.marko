@@ -1,3 +1,5 @@
+import { GearArmorSchema, GearWeaponSchema, GearConsumableSchema, GearWealthSchema, GearMiscSchema } from '../../schemata/gear'
+
 class {
   changeType(e) {
     switch(e.target.value) {
@@ -39,4 +41,6 @@ details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=
     DotInput errors=input.errors dot=input.dot field=`${input.field}.description` title='description' tooltip='Description.' type='textarea'
     DotInput errors=input.errors dot=input.dot field=`${input.field}.worth` type='number' title='worth' tooltip='Base wealth value.'
     if(input.dot[input.field+'.type'] === 'weapon')
-      Weapon dot=input.dot field=input.field errors=input.errors
+      Weapon dot=input.dot field=input.field errors=input.errors file=input.file config=input.config
+    else-if(input.dot[input.field+'.type'] === 'armor')
+      Armor dot=input.dot field=input.field errors=input.errors file=input.file config=input.config
