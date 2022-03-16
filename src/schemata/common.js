@@ -76,6 +76,10 @@ export const ComplexDamageTypeSchema = schisma({
   $type: [SimpleDamageTypeSchema],
 })
 
+export const OptionalComplexDamageTypeSchema = schisma({
+  $type: [SimpleDamageTypeSchema],
+})
+
 export const DamageTypeSchema = schisma({
   $typeof: [ComplexDamageTypeSchema, SimpleDamageTypeSchema],
   $required: true,

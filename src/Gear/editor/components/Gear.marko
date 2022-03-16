@@ -44,3 +44,5 @@ details on-toggle(e=>input.config[`toggles.${input.field}`]=e.target.open) open=
       Weapon dot=input.dot field=input.field errors=input.errors file=input.file config=input.config
     else-if(input.dot[input.field+'.type'] === 'armor')
       Armor dot=input.dot field=input.field errors=input.errors file=input.file config=input.config
+    else-if(input.dot[input.field+'.type'] === 'consumable')
+      Consumable dot=input.dot field=input.field errors=input.errors file=input.file config=input.config

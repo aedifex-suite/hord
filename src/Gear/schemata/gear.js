@@ -6,7 +6,9 @@ import {
   OptionalIntegerSchema,
   StrikeTypeSchema,
   ComplexDamageTypeSchema,
+  OptionalComplexDamageTypeSchema,
   OptionalImageSchema,
+  OptionalPropertiesSchema,
 } from '../../schemata/common'
 
 export const GearArmorSchema = schisma({
@@ -30,7 +32,12 @@ export const GearConsumableSchema = schisma({
   description: OptionalStringSchema,
   image: OptionalImageSchema,
   worth: IntegerSchema,
-  properties: [String]
+  properties: OptionalPropertiesSchema,
+  duration: OptionalIntegerSchema,
+  radius: OptionalIntegerSchema,
+  range: OptionalIntegerSchema,
+  damage: OptionalComplexDamageTypeSchema,
+  defense: OptionalComplexDamageTypeSchema,
 })
 
 export const GearMiscSchema = schisma({

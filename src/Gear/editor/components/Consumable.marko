@@ -1,0 +1,93 @@
+import { PropertySchema, SimpleDamageTypeSchema } from '../../../schemata/common'
+
+class {
+  addDamage() {
+    this.input.file.queue()
+    try {
+      let d = `${this.input.field}.damage`
+      if (!this.input.dot[d]) {
+        this.input.dot[d] = []
+      }
+      this.input.dot[d].push(SimpleDamageTypeSchema.create())
+    } catch(err) {
+      console.error(err)
+    }
+    this.input.file.unqueue()
+  }
+  deleteDamage(index) {
+    let d = `${this.input.field}.damage`
+    this.input.dot[d] = this.input.dot[d].filter((_,i)=>i!==index)
+  }
+  addDefense() {
+    this.input.file.queue()
+    console.log("adding defense", JSON.stringify(this.input.dot[`${this.input.field}`]))
+    try {
+      let d = `${this.input.field}.defense`
+      if (!this.input.dot[d]) {
+        this.input.dot[d] = []
+      }
+      this.input.dot[d].push(SimpleDamageTypeSchema.create())
+    } catch(err) {
+      console.error(err)
+    }
+    this.input.file.unqueue()
+    console.log("added defense", JSON.stringify(this.input.dot[`${this.input.field}`]))
+  }
+  deleteDefense(index) {
+    let d = `${this.input.field}.defense`
+    this.input.dot[d] = this.input.dot[d].filter((_,i)=>i!==index)
+  }
+  addProperty() {
+    let d = `${this.input.field}.properties`
+    this.input.file.queue()
+    try {
+      let d = `${this.input.field}.properties`
+        if (!this.input.dot[d]) {
+          this.input.dot[d] = []
+        }
+        this.input.dot[d].push(PropertySchema.create())
+    } catch(err) {
+      console.error(err)
+    }
+    this.input.file.unqueue()
+  }
+  deleteProperty(index) {
+    this.input.file.queue()
+    let d = `${this.input.field}.properties`
+    this.input.dot[d] = this.input.dot[d].filter((_,i)=>i!==index)
+    if (this.input.dot[d].length === 0) {
+      delete this.input.dot[d]
+    }
+    this.input.file.unqueue()
+  }
+}
+
+div.HordEditor__Gear__Consumable
+  fieldset
+    legend -- defenses
+      button on-click('addDefense') -- ＋
+    if(input.dot[`${input.field}.defense`])
+      for|defense,defenseIndex| of=input.dot[`${input.field}.defense`]
+        Damage on-delete('deleteDefense', defenseIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.defense.${defenseIndex}` config=input.config
+  fieldset
+    legend -- damage
+      button on-click('addDamage') -- ＋
+    if(input.dot[`${input.field}.damage`])
+      for|damage,damageIndex| of=input.dot[`${input.field}.damage`]
+        Damage on-delete('deleteDamage', damageIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.damage.${damageIndex}` config=input.config
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.range` type='number' title='range' tooltip='Range, as expressed in tiles.'
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.radius` type='number' title='radius' tooltip='Radius of effect.'
+  DotInput errors=input.errors dot=input.dot field=`${input.field}.duration` type='number' title='duration' tooltip='Duration of effect.'
+  fieldset
+    legend -- properties
+      button on-click('addProperty') -- ＋
+    if(input.dot[`${input.field}.properties`])
+      for|property,propertyIndex| of=input.dot[`${input.field}.properties`]
+        Property on-delete('deleteProperty', propertyIndex) errors=input.errors file=input.file dot=input.dot field=`${input.field}.properties.${propertyIndex}` config=input.config
+
+style {
+  .HordEditor__Gear__Consumable {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
