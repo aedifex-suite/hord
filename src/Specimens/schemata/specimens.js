@@ -5,5 +5,6 @@ export default schisma({
   type: 'hord-specimens',
   version: '1.0.0',
   specimens: [SpecimenSchema],
+  family: String,
   name: String,
 })
