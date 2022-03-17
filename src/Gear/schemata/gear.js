@@ -69,7 +69,7 @@ export const GearWeaponSchema = schisma({
   },
   weapontype: {
     $type: 'ranged',
-    $validate: v => ['melee', 'ranged', 'launched', 'combo', 'other'].includes(v),
+    $validate: v => ['melee', 'ranged', 'thrown', 'launched', 'combo', 'other'].includes(v),
     $required: false,
   },
   name: RequiredStringSchema,
